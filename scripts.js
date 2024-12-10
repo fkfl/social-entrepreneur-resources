@@ -30,10 +30,12 @@ function formatTimestamp(timestamp) {
     return `${date.toDateString()} at ${date.toLocaleTimeString()}`;
 }
 
-// Populate sections dynamically with timestamps
-function populateSection(id, items) {
-    const section = document.getElementById(`${id}-content`);
-    items.forEach(item => {
+// Populate section dynamically based on page
+function populateContent(sectionId, contentType) {
+    const section = document.getElementById(`${sectionId}-content`);
+    if (!section || !data[contentType]) return;
+
+    data[contentType].forEach(item => {
         const div = document.createElement('div');
         div.innerHTML = `
             <span class="timestamp">Published: ${formatTimestamp(item.timestamp)}</span>
@@ -42,6 +44,28 @@ function populateSection(id, items) {
         `;
         section.appendChild(div);
     });
+}
+
+// Identify current page and populate relevant content
+const currentPage = window.location.pathname.split('/').pop();
+switch (currentPage) {
+    case 'feeds.html':
+        populateContent('feeds', 'feeds');
+        break;
+    case 'funding.html':
+        populateContent('funding', 'funding');
+        break;
+    case 'events.html':
+        populateContent('events', 'events');
+        break;
+    case 'projects.html':
+        populateContent('projects', 'projects');
+        break;
+    case 'resources.html':
+        populateContent('resources', 'resources');
+        break;
+    default:
+        console.error("No dynamic content for this page.");
 }
 
 // Search functionality
