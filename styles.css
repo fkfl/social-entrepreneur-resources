@@ -92,3 +92,9 @@ footer {
 .hidden {
     display: none;
 }
+
+/* Same as before with added active menu styling */
+nav ul li a.active {
+    background: #0073e6;
+    color: white;
+}
