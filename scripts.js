@@ -1,25 +1,19 @@
-async function fetchContent(category) {
-    const response = await fetch(`/api/content?category=${category}`);
-    const content = await response.json();
-    return content;
-}
+async function fetchContent() {
+    const response = await fetch('http://127.0.0.1:5000/api/content');
+    const data = await response.json();
+    const container = document.getElementById('content-container');
+    container.innerHTML = '';
 
-function renderContent(content, container) {
-    container.innerHTML = "";
-    content.forEach(item => {
-        const div = document.createElement("div");
+    data.forEach(item => {
+        const div = document.createElement('div');
         div.innerHTML = `
-            <span class="timestamp">Published: ${new Date(item.timestamp).toLocaleString()}</span>
             <h3>${item.title}</h3>
             <p>${item.description}</p>
-            <a href="${item.source_url}" target="_blank">Read More</a>
+            <p><strong>Category:</strong> ${item.category}</p>
+            <p><a href="${item.source_url}" target="_blank">Read More</a></p>
         `;
         container.appendChild(div);
     });
 }
 
-async function populateContent(sectionId, category) {
-    const container = document.getElementById(`${sectionId}-content`);
-    const content = await fetchContent(category);
-    renderContent(content, container);
-}
+document.addEventListener('DOMContentLoaded', fetchContent);
