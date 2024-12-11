@@ -1,14 +1,17 @@
 from flask_cors import CORS
 CORS(app)
 
+const API_URL = "http://<your-ngrok-subdomain>.ngrok.io/api/content"; // Replace <your-ngrok-subdomain> with the actual subdomain
+
 async function fetchContent() {
-    const response = await fetch('http://127.0.0.1:5000/api/content');
+    const response = await fetch(API_URL);
     const data = await response.json();
-    const container = document.getElementById('content-container');
-    container.innerHTML = '';
+
+    const container = document.getElementById("content-container");
+    container.innerHTML = "";
 
     data.forEach(item => {
-        const div = document.createElement('div');
+        const div = document.createElement("div");
         div.innerHTML = `
             <h3>${item.title}</h3>
             <p>${item.description}</p>
@@ -19,4 +22,7 @@ async function fetchContent() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', fetchContent);
+document.addEventListener("DOMContentLoaded", fetchContent);
+
+
+
