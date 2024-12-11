@@ -1,8 +1,3 @@
-from flask_cors import CORS
-CORS(app)
-
-const API_URL = "http://<your-ngrok-subdomain>.ngrok.io/api/content"; // Replace <your-ngrok-subdomain> with the actual subdomain
-
 async function fetchContent() {
     const response = await fetch(API_URL);
     const data = await response.json();
@@ -23,6 +18,3 @@ async function fetchContent() {
 }
 
 document.addEventListener("DOMContentLoaded", fetchContent);
-
-
-
