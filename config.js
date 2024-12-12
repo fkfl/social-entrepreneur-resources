@@ -1,2 +1,2 @@
 console.log("Config.js is loaded. API_URL:", API_URL);
-const API_URL = "https://4a90-45-14-71-21.ngrok-free.app/api/content";
+const API_URL = "https://eff8-45-14-71-22.ngrok-free.app/api/content";
