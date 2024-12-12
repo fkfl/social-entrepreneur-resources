@@ -1,5 +1,5 @@
 // Ensure config.js is loaded for the API_URL
-console.log("API URL:", API_URL);
+console.log("Main.js started. API_URL:", typeof API_URL);
 
 async function fetchContent() {
     try {
