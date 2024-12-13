@@ -42,6 +42,8 @@ fetch(API_URL)
         console.log("Content-Type header:", contentType);
 
         if (!contentType || !contentType.includes("application/json")) {
+            const errorText = await response.text(); // Capture HTML response
+            console.error("Non-JSON response body:", errorText);
             throw new Error("Response is not JSON");
         }
 
