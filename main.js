@@ -1,11 +1,11 @@
 // Ensure config.js is loaded for the API_URL
+console.log("API_URL from config.js:", API_URL);
 console.log("Main.js loaded. Checking API_URL...");
 if (typeof API_URL === 'undefined') {
     console.error("API_URL is not defined. Check config.js loading and script order.");
 } else {
     console.log("API_URL is accessible:", API_URL);
 }
-console.log("API_URL from config.js:", API_URL);
 
 fetch(API_URL)
   .then(response => response.json())
