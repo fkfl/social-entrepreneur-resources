@@ -61,7 +61,9 @@ scheduler.start()
 @app.route('/api/content', methods=['GET'])
 def get_content():
     try:
+        # Fetch content from MongoDB
         content = list(content_collection.find({}, {"_id": 0}))
+        logging.info(f"Content retrieved from database: {content}")
         return jsonify(content)
     except Exception as e:
         logging.error(f"Error retrieving content: {e}")
