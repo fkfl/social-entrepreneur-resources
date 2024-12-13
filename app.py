@@ -28,8 +28,8 @@ def force_headers():
     # Create a placeholder response
     response.headers['Content-Security-Policy'] = (
         "default-src 'self'; "
-        "script-src 'self' https://9404-45-14-71-22.ngrok-free.app; "
-        "connect-src 'self' https://9404-45-14-71-22.ngrok-free.app;"
+        "script-src 'self' https://4349-45-14-71-22.ngrok-free.app; "
+        "connect-src 'self' https://4349-45-14-71-22.ngrok-free.app;"
     )
     return response
 
@@ -39,8 +39,8 @@ def apply_csp(response):
     # Allow resources from the same origin and specified external sources
     response.headers['Content-Security-Policy'] = (
         "default-src 'self'; "
-        "script-src 'self' https://9404-45-14-71-22.ngrok-free.app; "
-        "connect-src 'self' https://9404-45-14-71-22.ngrok-free.app;"
+        "script-src 'self' https://4349-45-14-71-22.ngrok-free.app; "
+        "connect-src 'self' https://4349-45-14-71-22.ngrok-free.app;"
     )
     return response
 
