@@ -7,18 +7,29 @@ fetch(API_URL)
   .then(data => console.log("Fetched data:", data))
   .catch(error => console.error("Error fetching data:", error));
 
-async function fetchContent() {
+  async function fetchContent() {
     try {
+        console.log("Attempting to fetch data from API_URL:", API_URL);
+
         const response = await fetch(API_URL);
+        console.log("Fetch response object:", response);
+
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const contentType = response.headers.get("content-type");
+        console.log("Content-Type header:", contentType);
+
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Response is not JSON");
         }
 
         const data = await response.json();
-        console.log("Fetched data:", data);
+        console.log("Fetched JSON data:", data);
 
         const container = document.getElementById("content-container");
-        container.innerHTML = "";
+        container.innerHTML = ""; // Clear old content
 
         data.forEach(item => {
             const div = document.createElement("div");
