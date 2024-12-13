@@ -9,15 +9,23 @@ if (typeof API_URL === 'undefined') {
 
 fetch(API_URL)
   .then(response => {
-    console.log("Fetch response status:", response.status);
+    console.log("Raw fetch response:", response);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const contentType = response.headers.get("content-type");
+    console.log("Content-Type:", contentType);
+
+    if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Response is not JSON");
+    }
+
     return response.json();
   })
-  .then(data => {
-    console.log("Fetched data:", data);
-  })
-  .catch(error => {
-    console.error("Fetch error:", error);
-  });
+  .then(data => console.log("Fetched data:", data))
+  .catch(error => console.error("Fetch error:", error));
 
   async function fetchContent() {
     try {
