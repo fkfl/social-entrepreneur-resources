@@ -14,43 +14,57 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 
 # Enable CORS for the entire application
-CORS(app, origins=["*"])  # Adjust origins as needed (e.g., specify your frontend URL)
+CORS(app, origins=["*"])  # Adjust for development. Restrict origins for production.
 
 # Connect to MongoDB
 client = MongoClient("mongodb://localhost:27017/")
 db = client["content_database"]
 content_collection = db["content"]
 
+# Apply CSP headers after each request
+@app.after_request
+def apply_csp(response):
+    # Allow resources from the same origin and specified external sources
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' https://9404-45-14-71-22.ngrok-free.app; "
+        "connect-src 'self' https://9404-45-14-71-22.ngrok-free.app;"
+    )
+    return response
+
 # Crawl and scrape function
 def scrape_data():
     logging.info("Starting scrape_data job...")
-    with open("sources.json", "r") as file:
-        sources = json.load(file)
+    try:
+        with open("sources.json", "r") as file:
+            sources = json.load(file)
 
-    for source in sources:
-        try:
-            response = requests.get(source["url"])
-            logging.info(f"Scraping {source['url']}")
-            soup = BeautifulSoup(response.content, 'html.parser')
-            articles = soup.find_all('article')  # Adjust for actual site structure
-            for article in articles:
-                title = article.find('h2').text.strip()
-                description = article.find('p').text.strip()
-                timestamp = datetime.datetime.utcnow().isoformat()
+        for source in sources:
+            try:
+                response = requests.get(source["url"])
+                logging.info(f"Scraping {source['url']}")
+                soup = BeautifulSoup(response.content, 'html.parser')
+                articles = soup.find_all('article')  # Adjust for actual site structure
+                for article in articles:
+                    title = article.find('h2').text.strip()
+                    description = article.find('p').text.strip()
+                    timestamp = datetime.datetime.utcnow().isoformat()
 
-                content_collection.update_one(
-                    {"title": title},
-                    {"$set": {
-                        "description": description,
-                        "timestamp": timestamp,
-                        "category": source["category"],
-                        "source_url": source["url"],
-                        "tags": []
-                    }},
-                    upsert=True
-                )
-        except Exception as e:
-            logging.error(f"Error scraping {source['url']}: {e}")
+                    content_collection.update_one(
+                        {"title": title},
+                        {"$set": {
+                            "description": description,
+                            "timestamp": timestamp,
+                            "category": source["category"],
+                            "source_url": source["url"],
+                            "tags": []
+                        }},
+                        upsert=True
+                    )
+            except Exception as e:
+                logging.error(f"Error scraping {source['url']}: {e}")
+    except Exception as e:
+        logging.error(f"Error loading sources.json: {e}")
 
 # Schedule the scraping task
 scheduler = BackgroundScheduler()
