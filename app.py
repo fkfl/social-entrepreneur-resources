@@ -21,6 +21,18 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client["content_database"]
 content_collection = db["content"]
 
+# Apply CSP headers before each request
+@app.before_request
+def force_headers():
+    response = jsonify()  
+    # Create a placeholder response
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' https://9404-45-14-71-22.ngrok-free.app; "
+        "connect-src 'self' https://9404-45-14-71-22.ngrok-free.app;"
+    )
+    return response
+
 # Apply CSP headers after each request
 @app.after_request
 def apply_csp(response):
